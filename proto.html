@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Usman - Search - Select</title>
+</head>
+
+<style>
+	div{
+		margin: 50px;
+	}
+	#sear{
+		margin-left: 150px
+	}
+	span{
+		font-size: 17px;
+		color: #0e0e0e;
+	}
+</style>
+
+
+<body>
+
+    <div id="sear" >
+    	<span>Filter results:&nbsp</span>
+    	<input type="text" onchange="computeResults()" id="myInput" name="search" placeholder="Search" style="padding: 5px">
+    	
+    	&nbsp  
+    	<select name="year" onchange="changeYear(this, this.selectedIndex);" style="padding: 5px">
+    		<option value="all">Year</option>
+    		<option value="2018">2018</option>
+    		<option value="2017">2017</option>
+    		<option value="2016">2016</option>
+    		<option value="2015">2015</option>
+    		<option value="2014">2014</option>
+    		<option value="2013">2013</option>
+    		<option value="2012">2012</option>
+    		<option value="2011">2011</option>
+    		<option value="2010">2010</option>
+    	</select>
+    	&nbsp
+    	<select name="institution" onchange="changeInstitution(this, this.selectedIndex);" style="padding: 5px">
+    		<option value="all">All</option>
+    		<option value="iobm">IoBM</option>
+    		<option value="others">Others</option>
+    	</select>
+        &nbsp
+    	<button onclick="submit()"  style="padding: 5px">Search Results</button>
+    
+
+    </div>
+
+
+    <div>
+    	<h3>Publications:</h3>
+    	<ol id="myList">
+    		<li id="2017"><a href="iobm" data-inst="iobm">Dolore laborum consectetur in amet laborum irure dolor id sit adipisicing cillum est 2017.</a></li>
+    		<li id="2017"><a href="" data-inst="others">Pariatur incididunt in occaecat consectetur elit velit tempor exercitation tempor aliqua 2017.</a></li>
+    		<li id="2016"><a href="" data-inst="others">Velit nostrud duis dolore est mollit laborum non eiusmod mollit quis cillum qui id aliquip in in laborum cillum 2016.</a></li>
+    		<li id="2012"><a href="iobm" data-inst="iobm">Aliqua sunt sed culpa consequat laborum laboris ut esse in consequat 2012. </a></li>
+            <li id="2011"><a href="" data-inst="others">Lorem ipsum in esse sed incididunt voluptate elit officia eu dolor duis minim nulla id 2011. </a></li>
+    		<li id="2011"><a href="" data-inst="others">Dolore enim ad veniam cupidatat culpa aliquip voluptate adipisicing consequat anim pariatur in duis adipisicing 2011.</a></li>
+    		<li id="2010"><a href="iobm" data-inst="iobm">Pariatur aute sit officia eu quis adipisicing laboris quis sed in id occaecat 2010.</a></li>
+    	</ol>
+    </div>
+
+
+<script>
+    
+    // this filters object contains the combined state of all the filters
+    var filters = {
+        year: '',
+        institute: '',
+        searchText: ''
+    }
+    
+    /**
+     * @author Ahsan Ayaz
+     * @desc Triggers on Search Results button click
+     */
+    function submit() {
+        computeResults();
+    }
+
+    /**
+     * @author Ahsan Ayaz
+     * @desc Sets the year filter and computes the results
+     */
+    function changeYear(select, index) {
+        filters.year = select.value;
+        computeResults();
+    }
+
+    /**
+     * @author Ahsan Ayaz
+     * @desc sets the institute filter and computes the results
+    */
+    function changeInstitution(select, index) {
+        filters.institute = select.value;
+        computeResults();
+    }
+
+    /**
+     * @author Ahsan Ayaz
+     * @desc Shows all the results regardless of filters
+     */
+    function showAllItems() {
+        let list = document.getElementById("myList");
+        let listItems = list.getElementsByTagName("li");
+        for (let i = 0, len = listItems.length; i < len; ++i) {
+            listItems[i].style.display = "";
+        }
+    }
+
+    /**
+     * @author Ahsan Ayaz
+     * @desc Computes the results to show based on the filters applied
+     */
+    function computeResults() {
+        showAllItems(); // initially show all items before computing
+        let list = document.getElementById("myList");
+        let listItems = list.getElementsByTagName("li");
+        let searchInput = document.getElementById("myInput");
+        filters.searchText = searchInput.value;
+        // looping through all the items
+        for (let i = 0, len = listItems.length; i < len; ++i) {
+            let link = listItems[i].getElementsByTagName("a")[0];
+            if (filters.institute !== 'all' && !link.getAttribute('data-inst').includes(filters.institute)) {
+                // if institute filter is applied and there is a match
+                listItems[i].style.display = "none";
+            } else if (filters.year !== 'all' && !link.innerHTML.includes(filters.year)) {
+                // if year filter is applied and there is a match
+                listItems[i].style.display = "none";
+            }
+            if (filters.searchText !== "" && !link.textContent.toLowerCase().includes(filters.searchText.toLowerCase())) {
+                // if the value of search input is not empty and there is a match
+                listItems[i].style.display = 'none';
+            }
+        }
+    }
+
+</script>
+
+
+</body>
+</html>
